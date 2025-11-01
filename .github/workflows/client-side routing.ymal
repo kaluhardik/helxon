@@ -1,0 +1,31 @@
+- name: Add React Router URLs to sitemap
+  run: |
+    node << 'EOF'
+    const fs = require('fs');
+    const path = require('path');
+    
+    // Read existing sitemap
+    const sitemapPath = './build/sitemap.xml';
+    let sitemap = fs.readFileSync(sitemapPath, 'utf8');
+    
+    // Add your React Router URLs
+    const additionalUrls = [
+      '  <url>',
+      '    <loc>https://ashy-bush-0c788db0f.3.azurestaticapps.net/about</loc>',
+      '    <lastmod>' + new Date().toISOString().split('T')[0] + '</lastmod>',
+      '    <changefreq>monthly</changefreq>',
+      '    <priority>0.8</priority>',
+      '  </url>',
+      '  <url>',
+      '    <loc>https://ashy-bush-0c788db0f.3.azurestaticapps.net/contact</loc>',
+      '    <lastmod>' + new Date().toISOString().split('T')[0] + '</lastmod>',
+      '    <changefreq>monthly</changefreq>',
+      '    <priority>0.7</priority>',
+      '  </url>'
+    ].join('\n');
+    
+    // Insert before closing urlset tag
+    sitemap = sitemap.replace('</urlset>', additionalUrls + '\n</urlset>');
+    fs.writeFileSync(sitemapPath, sitemap);
+    console.log('✅ Added React Router URLs to sitemap');
+    EOF
